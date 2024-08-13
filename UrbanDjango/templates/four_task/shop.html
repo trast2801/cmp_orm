@@ -1,0 +1,12 @@
+{% extends "menu.html" %}
+{% block pagename %}
+    {{ block.super }}
+{% endblock%}
+{%block menu %}
+    {{ block.super }}
+{% endblock %}
+{% block content %}
+    {{ block.super }}
+    <li><a href="http://127.0.0.1:8000/">Вернуться обратно</a></li>
+{% endblock %}
+

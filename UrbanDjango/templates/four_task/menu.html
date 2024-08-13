@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <pagename>
+        {% block pagename %}
+            <div style="text-align:center;">
+                <meta charset="UTF-8">
+                <title>{{title}}</title>
+
+                <link rel = 'stylesheet' type="text/css" href='{% static "style.css" %}'>
+            </div>
+        {% endblock %}
+    </pagename>
+
+</head>
+<body>
+    <menu>
+        {% block menu %}
+            <div style="text-align:center;">
+                <h1>{{head}}</h1>
+                <ul>
+                    <li><a href=#>Главное меню</a></li>
+                    <li><a href="http://127.0.0.1:8000/shop/">Магазин</a></li>
+                    <li><a href="http://127.0.0.1:8000/basket">Корзина</a></li>
+                </ul>
+            </div>
+        {% endblock %}
+    </menu>
+
+    <content>
+        {% block content %}
+            <ul>
+                {% for i in catalog %}
+                    <li>
+                        {{ i }}
+                            <button>
+                                <h4> Купить</h4>
+                            </button>
+                    </li>
+                {% endfor %}
+        </ul>
+        {% endblock %}
+    </content>
+</body>
+</html>
