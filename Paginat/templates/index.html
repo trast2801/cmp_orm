@@ -1,0 +1,25 @@
+
+
+<ul>
+    {% for post in posts %}
+    <li><h1>{{ post.title}}  </h1> </li>
+            {{ post.body}}
+            {{post.created_at}}
+    {% endfor %}
+</ul>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if posts.has_previous %}
+            <a href="?page={{ posts.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ posts.number }} из {{ paginator.num_pages }}.
+        </span>
+
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">Следующая</a>
+        {% endif %}
+    </span>
+</div>
