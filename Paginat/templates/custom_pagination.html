@@ -1,0 +1,32 @@
+{% block content %}
+<h1>Блог</h1>
+<form action="" method="get">
+    <label for="num_per_page">Количество постов на странице:</label>
+    <select id="num_per_page" name="num_per_page">
+        <option value="2">2</option>
+        <option value="1" >1</option>
+        <option value="3">3</option>
+    </select>
+    <input type="submit" value="Обновить">
+</form>
+<ul>
+    {% for post in posts %}
+    <li>{{ post.title }}</li>
+    {% endfor %}
+</ul>
+<div class="pagination">
+    <span class="step-links">
+        {% if posts.has_previous %}
+            <a href="?page={{ posts.previous_page_number }}&num_per_page={{ num_per_page }}">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ posts.number }} из {{ posts.paginator.num_pages }}.
+        </span>
+
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}&num_per_page={{ num_per_page }}">Следующая</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
