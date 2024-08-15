@@ -1,0 +1,18 @@
+>>> from task1.models import *  
+>>> a = Psg_user(username='JohnDoe', age=30)         
+>>> a.save
+<bound method Model.save of <Psg_user: JohnDoe>>
+>>> a.save()
+>>> user_id = new_user.id
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+NameError: name 'new_user' is not defined
+>>> user_id = a.id        
+>>> new_book = Psg_book(autor='SomeAuthor', name='SomeBookName', id_user=user_id)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\python_django2\19module\.venv\lib\site-packages\django\db\models\base.py", line 543, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\python_django2\19module\.venv\lib\site-packages\django\db\models\fields\related_descriptors.py", line 266, in __set__
+    raise ValueError(
+ValueError: Cannot assign "1": "Psg_book.id_user" must be a "Psg_user" instance.
