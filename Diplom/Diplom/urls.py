@@ -19,7 +19,9 @@ from django.urls import path
 
 from task1.views import productivity
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', productivity)
+    path('', productivity),
+
 ]

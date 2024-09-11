@@ -1,30 +1,55 @@
 import csv
 from os import path
-
-from django.contrib.sites import management
 from django.db.models import Count
 from django.shortcuts import render
 import time
 from django.db import connection
 from django.template.defaulttags import register
-from django.test import TestCase
-from psycopg2._psycopg import cursor
 from task1.models import *
-# Create your views here.
+from task1.sqlalchem_view import *
+from .sqlalchem_view import sql_alchem
+
 
 def productivity(request):
     title = "Тестирование производительности"
     head = "Сравнительная таблица"
-
     data = {}
     perf = Perfomance('Django')
+    # exec(open('task1//totrtoise_.py').read())
 
-    #rez = perf.import_from_csv()
-    #data['Загрузка тестовых данных']= [[rez, 2, 3 ]]
+    # rez = perf.import_from_csv()
+    # data['Загрузка тестовых данных']= [[rez, 2, 3 ]]
 
-    #one = perf.import_review()
-    #post_count = perf.get_count(request)
+    # one = perf.import_review()
+    # post_count = perf.get_count(request)
 
+    data = calculation_of_indicators(data, perf).copy()
+    data = sql_alchem(data).copy()
+    #data = asyncio.run(tortoise_main(data))
+
+    with open('task1//dict.txt', encoding='cp1251') as inp:
+        i = str(inp.readlines())
+
+    array = i.split(',')
+    z = 0
+    for key, j in data.items():
+        data.get(key)[0][2] = str(array[z]).replace('[', '')
+        z += 1
+
+    context = {
+        'title': title,
+        'head': head,
+        'data': data,
+
+    }
+    return render(request, 'productivity.html', context)
+
+
+from .models import *
+
+
+# функция тестирования CRUD
+def calculation_of_indicators(data: dict, perf):
     rez = perf.simple_query()
     data['Простой запрос к таблице есть запись'] = [[rez, 2, 3]]
 
@@ -41,21 +66,18 @@ def productivity(request):
     data['Запрос с условием фильтрации'] = [[rez, 2, 3]]
 
     rez = perf.join_()
-    data['Запрос с JOIN'] = [[rez, 2, 3]]
+    data['Запрос с JOIN'] = [[rez, 2, 6]]
 
-    #rez = perf.del_all_data()
-    data['Удаление тестовых данных']= [[rez, 2, 3 ]]
+    rez = perf.add_record()
+    data['Добавить запись'] = [[rez, 2, 6]]
 
-    context = {
-        'title' : title,
-        'head': head,
-        'data' : data,
-        'rez' : rez,
-        #'post_count' : post_count,
-    }
+    rez = perf.update_records()
+    data['Обновление по фильтру'] = [[rez, 2, 6]]
 
-    return render(request, 'productivity.html', context)
+    # rez = perf.del_all_data()
+    # data['Удаление тестовых данных']= [[rez, 2, 3 ]]
 
+    return data
 
 
 class Perfomance():
@@ -81,9 +103,9 @@ class Perfomance():
                         countries=row['countries'],
                     )
             end = time.time()
-            return  (f"{(end - start):.3f} сек.")
+            return (f"{(end - start):.3f} сек.")
         else:
-            return  (f" тестового  файла для загрузки/n не существует по пути: {csv_path}")
+            return (f" тестового  файла для загрузки/n не существует по пути: {csv_path}")
 
     def import_review(self):
         csv_path = 'data/posts.csv'
@@ -115,25 +137,27 @@ class Perfomance():
         return (f"{(end - start):.3f} сек.")
 
     def simple_query_not_find_record(self):
-            start = time.time()
-            Cinema.objects.filter(name="value").first()
-            end = time.time()
-            return (f"{(end - start):.3f} сек.")
+        start = time.time()
+        Cinema.objects.filter(name="value").first()
+        end = time.time()
+        return (f"{(end - start):.3f} сек.")
 
     @register.simple_tag
-    def get_count(self,request):
-         post_count = '{Review.objects.all().count()}'
-         return render(request, 'productivity.html', {'post_count': post_count})
+    def get_count(self, request):
+        post_count = '{Review.objects.all().count()}'
+        print(f'post_count')
+        return render(request, 'productivity.html', {'post_count': post_count})
 
     def group_by(self):
         start = time.time()
         Cinema.objects.values('movie_year').annotate(total_posts=Count('movie_year')).order_by('movie_year')
+
         end = time.time()
         return (f"{(end - start):.3f} сек.")
 
     def sort_(self):
         start = time.time()
-        Cinema.objects.all().order_by('countries')
+        Cinema.objects.all().order_by('name')
         end = time.time()
         return (f"{(end - start):.3f} сек.")
 
@@ -144,7 +168,7 @@ class Perfomance():
                     Select task1_cinema.name, task1_review.review from task1_cinema JOIN task1_review ON
                      task1_cinema.name = task1_review.name
                 """)
-        #Django не может связать таблицы где нет явно указанной связи
+        # Django не может связать таблицы где нет явно указанной связи
         end = time.time()
         return (f"{(end - start):.3f} сек.")
 
@@ -154,51 +178,17 @@ class Perfomance():
         end = time.time()
         return (f"{(end - start):.3f} сек.")
 
+    def add_record(self):
+        start = time.time()
+        a = Cinema.objects.create(name="test", movie_duration="test")
+        a.save()
+        end = time.time()
+        return (f"{(end - start):.3f} сек.")
 
-
-
-'''
-class PerformanceTestCase(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        # Создание тестовых данных
-        cls.create_test_data()
-
-    @classmethod
-    def tearDownClass(cls):
-        # Удаление тестовых данных
-        cls.delete_test_data()
-        super().tearDownClass()
-
-    def test_performance_of_complex_queries(self):
-        with self.subTest("Query 1"):
-            # Запрос 1
-            # Путь к CSV файлу
-            csv_path = 'data/kp_all_movies.csv'
-
-            # Имя модели, которая будет создана на основе CSV файла
-            model_name = 'Cinema'
-
-            # Импорт данных из CSV файла
-            start = time.time()
-            management.call_command('import_csv', model_name, csv_path)
-            #results = Cinema.objects.complex_query_1()
-            end = time.time()
-            print(f" Время загрузки в БД  1 took {end - start} секунд.")
-
-        with self.subTest("Query 2"):
-            # Запрос 2
-            start = time.time()
-            results = Cinema.objects.complex_query_2()
-            end = time.time()
-            print(f"Complex query 2 took {end - start} seconds.")
-
-
-    def create_test_data(self):
-        # Функция для создания тестовых данных
-    
-
-    def delete_test_data(self):
-        # Функция для удаления тестовых данных
-'''
+    def update_records(self):
+        start = time.time()
+        query_for_filter = Cinema.objects.filter(countries='test Updated')
+        query_for_filter.update(countries=('test') + ' Updated')
+        # query_for_filter.save()
+        end = time.time()
+        return (f"{(end - start):.3f} сек.")

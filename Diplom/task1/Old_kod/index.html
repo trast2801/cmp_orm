@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ Title }}</title>
+    <h1 style="text-align:center;">  {{ head }} </h1>
+</head>
+<body>
+<table border="1" style="border:1px solid black;margin-left:auto;margin-right:auto;">
+    <tr>
+        <td> Показатель /мс </td>
+        <td>Django ORM</td>
+        <td>SQLAlchemy</td>
+        <td> Tortoise ORM</td>
+    </tr>
+    {% for key, values in data.items %}
+        <tr>
+            <td>{{key}}</td>
+            {% for v in values.0 %}
+                 <td>{{v}}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+</table>
+    <ul>
+
+        <li><a href="http://127.0.0.1:8000/django/">Джанго</a></li>
+        <li><a href="http://127.0.0.1:8000/test/">Тест</a></li>
+    </ul>
+</body>
+</html>
