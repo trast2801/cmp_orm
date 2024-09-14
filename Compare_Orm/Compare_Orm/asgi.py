@@ -1,5 +1,5 @@
 """
-ASGI config for Diplom project.
+ASGI config for Compare_Orm project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -21,6 +21,6 @@ application = get_asgi_application()
 # which is a Tortoise model actually
 application = get_boosted_asgi_application(application)
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Diplom.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Compare_Orm.settings')
 
 #application = get_asgi_application()

@@ -17,7 +17,7 @@ async  def tortoise_main(data1: dict):
 '''
     Tortoise.init(
         #db_url="sqlite://db.sqlite3",
-        db_url="sqlite:///C:\\python_django2\\19module\\Diplom\\db.sqlite3",
+        db_url="sqlite:///C:\\python_django2\\19module\\Compare_Orm\\db.sqlite3",
 
         # Модулем для моделей указываем __main__,
         # т.к. все модели для показа будем прописывать

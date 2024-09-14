@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 def sql_alchem(data : dict):
 
-    engine=create_engine('sqlite:///C:\\python_django2\\19module\\Diplom\\db.sqlite3')
+    engine=create_engine('sqlite:///C:\\python_django2\\19module\\Compare_Orm\\db.sqlite3')
     with Session(autoflush=False, bind=engine) as db:
         rez = al_simple_query(db, True)
         data['Простой запрос к таблице есть запись'][0][1] = rez

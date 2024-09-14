@@ -5,11 +5,11 @@ from tortoise.functions import Count
 from task1.T_models.T_Cinema import T_Cinema
 from task1.T_models.T_Review import T_Review
 
-DB_PATH= r"/Diplom/db.sqlite3"
+DB_PATH= r"/Compare_Orm/db.sqlite3"
 
 async def tortoise_init():
     await Tortoise.init(
-        db_url="sqlite:///C:\\python_django2\\19module\\Diplom\\db.sqlite3",
+        db_url="sqlite:///C:\\python_django2\\19module\\Compare_Orm\\db.sqlite3",
         modules={'models': ['T_models.T_Cinema', 'T_models.T_Review']},
     )
     await Tortoise.generate_schemas()

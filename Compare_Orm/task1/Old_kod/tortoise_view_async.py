@@ -13,7 +13,7 @@ from task1.T_models import T_Cinema
 #from task1.models_tortoise import T_Cinema
 async def tortoise_main(data: dict):
     await Tortoise.init(
-        db_url="sqlite:///C:\\python_django2\\19module\\Diplom\\db.sqlite3",
+        db_url="sqlite:///C:\\python_django2\\19module\\Compare_Orm\\db.sqlite3",
         modules={"models": ["task1.T_models"]},
     )
     await Tortoise.generate_schemas()
@@ -29,7 +29,7 @@ async def tortoise_main(data: dict):
 
     await Tortoise.init(
         #db_url="sqlite://db.sqlite3",
-        db_url="sqlite:///C:\\python_django2\\19module\\Diplom\\db.sqlite3",
+        db_url="sqlite:///C:\\python_django2\\19module\\Compare_Orm\\db.sqlite3",
         modules={"models": ["task1.T_models"]},
     )
     #Tortoise.init_models([ "task1.T_models.T_Cinema"], "models")
