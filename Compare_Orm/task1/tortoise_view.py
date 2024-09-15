@@ -1,17 +1,20 @@
+import os
 import time
 
 from tortoise import Tortoise, fields, models, run_async
 from tortoise.functions import Count
-from task1.T_models.T_Cinema import T_Cinema
-from task1.T_models.T_Review import T_Review
+from task1.T_models.T_Cinema_ import T_Cinema
+from task1.T_models.T_Review_ import T_Review
 
 DB_PATH = r"/Compare_Orm\db.sqlite3"
 
 
 async def tortoise_init():
+    db_file_path = os.path.join(os.getcwd(), 'db.sqlite3')
     await Tortoise.init(
         db_url="sqlite:///C:\\python_django2\\19module\\Compare_Orm\\db.sqlite3",
-        modules={'models': ['T_models.T_Cinema', 'T_models.T_Review']},
+        #db_url="sqlite:///" + db_file_path,
+        modules={'models': ['T_models.T_Cinema_', 'T_models.T_Review_']},
     )
     await Tortoise.generate_schemas()
 
@@ -76,6 +79,16 @@ async def t_update_records(data: dict):
 
 
 async def tortoise_main(data: dict):
+    data = {
+        'Простой запрос к таблице есть запись': [["", "", ""]],
+        'Простой запрос к таблице нет записи': [["", "", ""]],
+        'Запрос с GROUP BY': [["", "", ""]],
+        'Запрос с сортировкой': [["", "", ""]],
+        'Запрос с условием фильтрации': [["", "", ""]],
+        'Запрос с JOIN': [["", "", ""]],
+        'Добавить запись': [["", "", ""]],
+        'Обновление по фильтру': [["", "", ""]]
+    }
     await tortoise_init()
     await t_simple_query(data, True)
     await t_simple_query(data, False)
@@ -88,7 +101,7 @@ async def tortoise_main(data: dict):
     await Tortoise.close_connections()
     return data
 
-
+'''
 if __name__ == "__main__":
     data = {
         'Простой запрос к таблице есть запись': [["", "", ""]],
@@ -107,6 +120,8 @@ if __name__ == "__main__":
     for i, j in data.items():
         nev = nev + (j[0][2]) + ','
         print(i, j)
-
-    with open(r'/Compare_Orm\task1\dict.txt', 'w') as i:
+    file_path = os.path.join(os.getcwd(), 'dict.txt')
+    #with open(r'Compare_Orm\task1\dict.txt', 'w') as i:
+    with open(file_path, 'w', encoding='cp1251') as i:
         i.write(str(nev))
+'''

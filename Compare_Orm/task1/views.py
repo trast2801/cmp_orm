@@ -5,9 +5,13 @@ from django.shortcuts import render
 import time
 from django.db import connection
 from django.template.defaulttags import register
+from django.utils import asyncio
 from task1.models import *
 from task1.sqlalchem_view import *
+from tortoise import run_async
+
 from .sqlalchem_view import sql_alchem
+from .tortoise_view import tortoise_main
 
 
 def productivity(request):
@@ -25,7 +29,9 @@ def productivity(request):
 
     data = calculation_of_indicators(data, perf).copy()
     data = sql_alchem(data).copy()
-    #data = asyncio.run(tortoise_main(data))
+    #data = asyncio.run(tortoise_main(data)).copy()
+
+
 
     with open('task1//dict.txt', encoding='cp1251') as inp:
         i = str(inp.readlines())

@@ -1,3 +1,4 @@
+import os
 import time
 
 from sqlalchemy import create_engine, text
@@ -8,7 +9,11 @@ from sqlalchemy.orm import Session
 
 def sql_alchem(data : dict):
 
-    engine=create_engine('sqlite:///C:\\python_django2\\19module\\Compare_Orm\\db.sqlite3')
+    #engine=create_engine('sqlite:///C:\\python_django2\\19module\\Compare_Orm\\db.sqlite3')
+    db_file_path = os.path.join(os.getcwd(), 'db.sqlite3')
+
+    # Создание соединения с базой данных
+    engine = create_engine('sqlite:///' + db_file_path)
     with Session(autoflush=False, bind=engine) as db:
         rez = al_simple_query(db, True)
         data['Простой запрос к таблице есть запись'][0][1] = rez
